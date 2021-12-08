@@ -1,20 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
+import Qualities from './qualities';
+import Bookmark from './bookmark';
 
-const Table = ({ users, handleDelete }) => {
-  const getQualityClasses = quality => {
-    return `badge bg-${quality.color} m-2`;
-  };
+const TableOfUsers = ({ users, handleDelete, handleToggleBookmark }) => {
   return (
     <table className="table">
       <thead>
-        <tr>
+        <tr className="center-elem">
           <th scope="col">Имя</th>
           <th scope="col">Качества</th>
           <th scope="col">Профессия</th>
           <th scope="col">Встретился раз</th>
           <th scope="col">Оценка</th>
+          <th scope="col">Избранное</th>
           <th scope="col"> </th>
         </tr>
       </thead>
@@ -22,16 +22,15 @@ const Table = ({ users, handleDelete }) => {
         {users.map(user => (
           <tr key={user._id}>
             <td>{user.name}</td>
-            <td>
-              {user.qualities.map(qualities => (
-                <span key={qualities.color} className={getQualityClasses(qualities)}>
-                  {qualities.name}
-                </span>
-              ))}
-            </td>
-            <td>{user.profession.name}</td>
-            <td>{user.completedMeetings}</td>
-            <td>{user.rate}/5</td>
+            <Qualities qualities={user.qualities} />
+            <td className="center-elem">{user.profession.name}</td>
+            <td className="center-elem">{user.completedMeetings}</td>
+            <td className="center-elem">{user.rate}/5</td>
+            <Bookmark
+              bookmark={user.bookmark}
+              id={user._id}
+              handleToggleBookmark={handleToggleBookmark}
+            />
             <td>
               <button
                 type="button"
@@ -48,9 +47,10 @@ const Table = ({ users, handleDelete }) => {
   );
 };
 
-Table.propTypes = {
+TableOfUsers.propTypes = {
   users: PropTypes.array.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  handleToggleBookmark: PropTypes.func.isRequired,
 };
 
-export default Table;
+export default TableOfUsers;
