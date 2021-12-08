@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import Phrase from './components/phrase';
-import Table from './components/table';
+import TableOfUsers from './components/tableOfUsers';
 import api from '../../api/index';
 
 const Users = () => {
@@ -24,10 +25,26 @@ const Users = () => {
     renderPhrase(users.length);
   };
 
+  const handleToggleBookmark = id => {
+    const updateUsers = users.map(user => {
+      if (user._id === id) {
+        user.bookmark = !user.bookmark;
+      }
+      return user;
+    });
+    setUsers(updateUsers);
+  };
+
   return (
     <>
       <Phrase users={users} phrase={phrase} />
-      {users.length ? <Table users={users} handleDelete={handleDelete} /> : null}
+      {users.length ? (
+        <TableOfUsers
+          users={users}
+          handleDelete={handleDelete}
+          handleToggleBookmark={handleToggleBookmark}
+        />
+      ) : null}
     </>
   );
 };
