@@ -1,11 +1,16 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TableOfUsers from './components/tableOfUsers';
 import api from '../../api/index';
 
 const Users = () => {
-  const [users, setUsers] = useState(api.users.fetchAll());
+  const [users, setUsers] = useState();
+  useEffect(() => {
+    api.users.fetchAll().then(data => {
+      setUsers(data);
+    });
+  }, []);
 
   const handleDelete = id => {
     setUsers(users.filter(user => user._id !== id));
@@ -22,15 +27,15 @@ const Users = () => {
   };
 
   return (
-    <>
-      {users.length ? (
+    <div className="d-flex">
+      {users ? (
         <TableOfUsers
           users={users}
           handleDelete={handleDelete}
           handleToggleBookmark={handleToggleBookmark}
         />
       ) : null}
-    </>
+    </div>
   );
 };
 
