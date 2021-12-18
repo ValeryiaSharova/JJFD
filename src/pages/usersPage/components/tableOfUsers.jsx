@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Qualities from './qualities';
 import Bookmark from './bookmark';
-import Pagination from './paginationn';
+import Pagination from '../../../sharedComponents/paginationn';
 import { paginate } from '../../../utilits/paginate';
 
 const TableOfUsers = ({ users, handleDelete, handleToggleBookmark }) => {
