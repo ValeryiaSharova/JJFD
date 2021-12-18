@@ -5,6 +5,7 @@ import Qualities from './qualities';
 import Bookmark from './bookmark';
 import Pagination from '../../../sharedComponents/paginationn';
 import { paginate } from '../../../utilits/paginate';
+import Phrase from './phrase';
 
 const TableOfUsers = ({ users, handleDelete, handleToggleBookmark }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,6 +60,7 @@ const TableOfUsers = ({ users, handleDelete, handleToggleBookmark }) => {
         pageSize={pageSize}
         onPageChange={handlePageChange}
       />
+        <Phrase users={filteredUsers} />
     </>
   );
 };
