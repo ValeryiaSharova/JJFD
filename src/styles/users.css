@@ -10,3 +10,19 @@ span.badge {
 .center-elem {
   text-align: center;
 }
+
+td:nth-child(1) {
+  text-align: left;
+}
+
+td:nth-child(2) {
+  width: 350px;
+}
+
+td:nth-child(1) {
+  width: 160px;
+}
+
+td:nth-child(3) {
+  width: 160px;
+}
