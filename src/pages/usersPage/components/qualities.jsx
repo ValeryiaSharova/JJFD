@@ -6,13 +6,13 @@ const Qualities = ({ qualities }) => {
     return `badge bg-${quality.color} m-2`;
   };
   return (
-    <td>
+    <>
       {qualities.map(qualitie => (
         <span key={qualitie.color} className={getQualityClasses(qualitie)}>
           {qualitie.name}
         </span>
       ))}
-    </td>
+    </>
   );
 };
 

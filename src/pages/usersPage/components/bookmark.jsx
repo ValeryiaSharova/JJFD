@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 
 const Bookmark = ({ bookmark, id, handleToggleBookmark }) => {
   return (
-    <td className="center-elem">
+    <>
       {bookmark ? (
         <i className="bi bi-bookmark-fill" onClick={() => handleToggleBookmark(id)} />
       ) : (
         <i className="bi bi-bookmark" onClick={() => handleToggleBookmark(id)} />
       )}
-    </td>
+    </>
   );
 };
 
