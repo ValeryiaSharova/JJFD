@@ -26,3 +26,12 @@ td:nth-child(1) {
 td:nth-child(3) {
   width: 160px;
 }
+
+.table {
+  min-height: 530px;
+  display: block;
+}
+
+.bi {
+  cursor: pointer;
+}
