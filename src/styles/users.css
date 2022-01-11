@@ -35,3 +35,24 @@ td:nth-child(3) {
 .bi {
   cursor: pointer;
 }
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+.nav-link {
+  color: black;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:visited {
+  color: black;
+  text-decoration: underline;
+}
