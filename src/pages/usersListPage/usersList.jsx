@@ -1,46 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import { paginate } from '../../utilits/paginate';
 import GroupList from '../../sharedComponents/groupList';
 import Phrase from './components/phrase';
 import Pagination from '../../sharedComponents/paginationn';
 import UsersTable from './components/usersTable';
-import api from '../../api/index';
 
-const Users = () => {
+const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
-  const [users, setUsers] = useState();
   const pageSize = 8;
 
-  useEffect(() => {
-    api.users.fetchAll().then(data => {
-      setUsers(data);
-    });
-  }, []);
-  useEffect(() => {
-    api.professions.fetchAll().then(data => {
-      setProfessions(data);
-    });
-  }, []);
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
 
-  const handleDelete = userId => {
-    setUsers(users.filter(user => user._id !== userId));
-  };
-  const handleToggleBookmark = id => {
-    const updateUsers = users.map(user => {
-      if (user._id === id) {
-        user.bookmark = !user.bookmark;
-      }
-      return user;
-    });
-    setUsers(updateUsers);
-  };
   const handleProfessionSelect = item => {
     setSelectedProf(item);
   };
@@ -104,4 +80,11 @@ const Users = () => {
   return 'loading';
 };
 
-export default Users;
+UsersList.propTypes = {
+  users: PropTypes.arrayOf(PropTypes.object).isRequired,
+  professions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  handleToggleBookmark: PropTypes.func.isRequired,
+};
+
+export default UsersList;

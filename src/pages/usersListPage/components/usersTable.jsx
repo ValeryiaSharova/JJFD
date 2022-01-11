@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Qualities from './qualities';
+import Qualities from '../../../sharedComponents/qualities';
 import Bookmark from './bookmark';
 import Table from './table';
 
