@@ -12,8 +12,8 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  extends: ['airbnb', 'airbnb/hooks', 'plugin:prettier/recommended'],
-  plugins: ['react', 'react-hooks'],
+  extends: ['airbnb', 'airbnb/hooks', 'plugin:prettier/recommended', 'plugin:jsx-a11y/recommended'],
+  plugins: ['react', 'react-hooks', 'jsx-a11y'],
   rules: {
     'max-len': [
       'error',
@@ -56,5 +56,9 @@ module.exports = {
     'implicit-arrow-linebreak': 'off',
     'no-plusplus': 'off',
     'object-curly-newline': 'off',
+    'no-underscore-dangle': 'off',
+    'react/require-default-props': 'off',
+    'no-param-reassign': 0,
+    'jsx-a11y/no-noninteractive-element-to-interactive-role': ['error', { li: ['button'] }],
   },
 };

@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-param-reassign */
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { paginate } from '../../utilits/paginate';
