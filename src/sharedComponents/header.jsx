@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <nav className="nav">
-      <Link className="nav-link active" to="/">
+      <Link className="nav-link" to="/">
         Main
       </Link>
       <Link className="nav-link" to="/login">
