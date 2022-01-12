@@ -33,7 +33,7 @@ const User = ({ userId, getById }) => {
       </div>
     );
   }
-  return <h1>Loading</h1>;
+  return <h1>Загрузка...</h1>;
 };
 
 User.propTypes = {

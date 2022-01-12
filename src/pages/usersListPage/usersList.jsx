@@ -77,7 +77,7 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) =
       </div>
     );
   }
-  return 'loading';
+  return <h1>Загрузка...</h1>;
 };
 
 UsersList.propTypes = {

@@ -5,13 +5,13 @@ const Header = () => {
   return (
     <nav className="nav">
       <Link className="nav-link" to="/">
-        Main
+        Главная
       </Link>
       <Link className="nav-link" to="/login">
-        Login
+        Вход
       </Link>
       <Link className="nav-link" to="/users">
-        Users
+        Пользователи
       </Link>
     </nav>
   );
