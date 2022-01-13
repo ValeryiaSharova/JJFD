@@ -12,9 +12,9 @@ const Phrase = ({ length }) => {
     return 'Никто с тобой не тусанет';
   };
   const getPhraseClasses = () => {
-    return length ? `badge bg-primary` : `badge bg-danger`;
+    return length ? ` badge bg-primary` : ` badge bg-danger`;
   };
-  return <h1 className={getPhraseClasses()}>{renderPhrase(length)}</h1>;
+  return <h1 className={`phrase${getPhraseClasses()}`}>{renderPhrase(length)}</h1>;
 };
 
 Phrase.propTypes = {

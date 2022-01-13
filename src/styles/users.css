@@ -56,3 +56,8 @@ td:nth-child(3) {
   color: black;
   text-decoration: underline;
 }
+
+.phrase {
+  display: flex;
+  width: fit-content;
+}
