@@ -7,10 +7,11 @@ import Phrase from './components/phrase';
 import Pagination from '../../sharedComponents/paginationn';
 import UsersTable from './components/usersTable';
 
-const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) => {
+const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onSearch }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
+  const [searchValue, setSearchValue] = useState('');
   const pageSize = 8;
 
   useEffect(() => {
@@ -18,6 +19,8 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) =
   }, [selectedProf]);
 
   const handleProfessionSelect = item => {
+    setSearchValue('');
+    onSearch('');
     setSelectedProf(item);
   };
   const handlePageChange = pageIndex => {
@@ -27,57 +30,68 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) =
     setSortBy(item);
   };
 
-  if (users) {
-    const filteredUsers = selectedProf
-      ? users.filter(user => _.isEqual(user.profession, selectedProf))
-      : users;
-    const count = filteredUsers.length;
-    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
-    const userCrop = paginate(sortedUsers, currentPage, pageSize);
+  const filteredUsers = selectedProf
+    ? users.filter(user => _.isEqual(user.profession, selectedProf))
+    : users;
+  const count = filteredUsers.length;
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+  const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
-    const clearFilter = () => {
-      setSelectedProf();
-    };
+  const clearFilter = () => {
+    setSelectedProf();
+  };
 
-    return (
-      <div className="d-flex">
-        {professions && (
-          <div className="d-flex flex-column flex-shrink-0 p-3">
-            <GroupList
-              selectedItem={selectedProf}
-              items={professions}
-              onItemSelect={handleProfessionSelect}
-            />
-            <button className="btn btn-secondary mt-2" type="button" onClick={clearFilter}>
-              Очистить
-            </button>
-          </div>
-        )}
-        <div className="d-flex flex-column">
-          <Phrase length={count} />
-          {count > 0 ? (
-            <UsersTable
-              users={userCrop}
-              handleDelete={handleDelete}
-              handleToggleBookmark={handleToggleBookmark}
-              onSort={handleSort}
-              selectedSort={sortBy}
-            />
-          ) : null}
+  const handleSearch = ({ target }) => {
+    setCurrentPage(1);
+    setSearchValue(target.value);
+    clearFilter();
+    onSearch(target.value);
+  };
 
-          <div className="d-flex justify-content-center">
-            <Pagination
-              itemsCount={count}
-              currentPage={currentPage}
-              pageSize={pageSize}
-              onPageChange={handlePageChange}
-            />
-          </div>
+  return (
+    <div className="d-flex">
+      {professions && (
+        <div className="d-flex flex-column flex-shrink-0 p-3">
+          <GroupList
+            selectedItem={selectedProf}
+            items={professions}
+            onItemSelect={handleProfessionSelect}
+          />
+          <button className="btn btn-secondary mt-2" type="button" onClick={clearFilter}>
+            Очистить
+          </button>
+        </div>
+      )}
+      <div className="d-flex flex-column">
+        <Phrase length={count} />
+        <input
+          type="text"
+          className="form-control mt-2"
+          placeholder="Поиск..."
+          value={searchValue}
+          onChange={handleSearch}
+        />
+        {count > 0 ? (
+          <UsersTable
+            users={userCrop}
+            handleDelete={handleDelete}
+            handleToggleBookmark={handleToggleBookmark}
+            onSort={handleSort}
+            selectedSort={sortBy}
+          />
+        ) : null}
+
+        <div className="d-flex justify-content-center">
+          <Pagination
+            itemsCount={count}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
-    );
-  }
-  return <h1>Загрузка...</h1>;
+    </div>
+  );
 };
 
 UsersList.propTypes = {
@@ -85,6 +99,7 @@ UsersList.propTypes = {
   professions: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleToggleBookmark: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default UsersList;
