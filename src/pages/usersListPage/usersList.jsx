@@ -6,6 +6,7 @@ import GroupList from '../../sharedComponents/groupList';
 import Phrase from './components/phrase';
 import Pagination from '../../sharedComponents/paginationn';
 import UsersTable from './components/usersTable';
+import Search from '../../sharedComponents/search';
 
 const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onSearch }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,13 +65,7 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onS
       )}
       <div className="d-flex flex-column">
         <Phrase length={count} />
-        <input
-          type="text"
-          className="form-control mt-2"
-          placeholder="Поиск..."
-          value={searchValue}
-          onChange={handleSearch}
-        />
+        <Search searchValue={searchValue} handleSearch={handleSearch} />
         {count > 0 ? (
           <UsersTable
             users={userCrop}
