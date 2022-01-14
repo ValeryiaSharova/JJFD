@@ -8,12 +8,10 @@ const Users = () => {
   const params = useParams();
   const [users, setUsers] = useState();
   const [professions, setProfessions] = useState();
-  const [initialUsers, setInitialUsers] = useState();
   const { getById } = api.users;
   useEffect(() => {
     api.users.fetchAll().then(data => {
       setUsers(data);
-      setInitialUsers(data);
     });
   }, []);
   useEffect(() => {
@@ -34,19 +32,6 @@ const Users = () => {
     });
     setUsers(updateUsers);
   };
-  const handleSearch = searchValue => {
-    const foundUsers = [];
-    if (searchValue === '') {
-      setUsers(initialUsers);
-      return;
-    }
-    initialUsers.forEach(user => {
-      if (user.name.toLowerCase().includes(searchValue.toLowerCase())) {
-        foundUsers.push(user);
-      }
-    });
-    setUsers(foundUsers);
-  };
   const { userId } = params;
   if (users && professions) {
     return (
@@ -55,7 +40,6 @@ const Users = () => {
           <User userId={userId} getById={getById} />
         ) : (
           <UsersList
-            onSearch={handleSearch}
             users={users}
             professions={professions}
             handleDelete={handleDelete}

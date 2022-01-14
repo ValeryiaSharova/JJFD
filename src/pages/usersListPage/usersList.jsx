@@ -8,7 +8,7 @@ import Pagination from '../../sharedComponents/paginationn';
 import UsersTable from './components/usersTable';
 import Search from '../../sharedComponents/search';
 
-const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onSearch }) => {
+const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
@@ -17,11 +17,12 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onS
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProf]);
+  }, [selectedProf, searchValue]);
 
   const handleProfessionSelect = item => {
-    setSearchValue('');
-    onSearch('');
+    if (searchValue) {
+      setSearchValue('');
+    }
     setSelectedProf(item);
   };
   const handlePageChange = pageIndex => {
@@ -31,7 +32,9 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onS
     setSortBy(item);
   };
 
-  const filteredUsers = selectedProf
+  const filteredUsers = searchValue
+    ? users.filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()))
+    : selectedProf
     ? users.filter(user => _.isEqual(user.profession, selectedProf))
     : users;
   const count = filteredUsers.length;
@@ -43,10 +46,8 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark, onS
   };
 
   const handleSearch = ({ target }) => {
-    setCurrentPage(1);
-    setSearchValue(target.value);
     clearFilter();
-    onSearch(target.value);
+    setSearchValue(target.value);
   };
 
   return (
@@ -94,7 +95,6 @@ UsersList.propTypes = {
   professions: PropTypes.arrayOf(PropTypes.object).isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleToggleBookmark: PropTypes.func.isRequired,
-  onSearch: PropTypes.func.isRequired,
 };
 
 export default UsersList;
