@@ -60,5 +60,6 @@ module.exports = {
     'react/require-default-props': 'off',
     'no-param-reassign': 0,
     'jsx-a11y/no-noninteractive-element-to-interactive-role': ['error', { li: ['button'] }],
+    'no-nested-ternary': 'off',
   },
 };
