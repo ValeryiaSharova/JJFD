@@ -1,6 +1,3 @@
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-shadow */
-/* eslint-disable consistent-return */
 export function validator(data, config) {
   const errors = {};
   function validate(validateMethod, data, config) {

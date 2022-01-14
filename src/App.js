@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Login from './pages/loginPage/login';
 import Main from './pages/mainPage/main';
 import Users from './pages/usersPage/usersPage';
-import Header from './sharedComponents/header';
+import Header from './components/header';
 
 const App = () => (
   <>

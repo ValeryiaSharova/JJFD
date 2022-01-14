@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { paginate } from '../../utilits/paginate';
 import GroupList from '../../sharedComponents/groupList';
 import Phrase from './components/phrase';
-import Pagination from '../../sharedComponents/paginationn';
+import Pagination from '../../sharedComponents/pagination';
 import UsersTable from './components/usersTable';
 import Search from '../../sharedComponents/search';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Qualities from '../../../sharedComponents/qualities';
-import Bookmark from './bookmark';
-import Table from './table';
+import Bookmark from '../../../sharedComponents/bookmark';
+import Table from '../../../sharedComponents/table/table';
 
 const UsersTable = ({ users, onSort, selectedSort, handleToggleBookmark, handleDelete }) => {
   const columns = {
