@@ -9,7 +9,7 @@ const User = ({ userId, getById }) => {
   useEffect(() => {
     getById(userId).then(data => {
       setUser(data);
-    });
+    }, []);
   }, [getById, userId]);
   const handleReturn = () => {
     history.push('/users');
