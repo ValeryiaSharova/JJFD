@@ -92,7 +92,7 @@ const UsersList = ({ users, professions, handleDelete, handleToggleBookmark }) =
 
 UsersList.propTypes = {
   users: PropTypes.arrayOf(PropTypes.object).isRequired,
-  professions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  professions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleToggleBookmark: PropTypes.func.isRequired,
 };
