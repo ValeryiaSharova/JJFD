@@ -7,8 +7,6 @@ const SelectField = ({ label, value, onChange, defaultOption, options, error, na
     return `form-select${error ? ' is-invalid' : ''}`;
   };
   const handleChange = ({ target }) => {
-    console.log(target);
-    console.log({ name: target.name, value: target.value });
     onChange({ name: target.name, value: target.value });
   };
   const optionsArray =
