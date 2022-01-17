@@ -1,29 +1,33 @@
 /* eslint-disable no-useless-return */
 import React, { useState, useEffect } from 'react';
-import TextField from '../../../sharedComponents/textField';
-import { validator } from '../../../utilits/validator';
+import * as yup from 'yup';
+import TextField from '../../../sharedComponents/form/textField';
+import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
 
 const LoginForm = () => {
-  const [data, setData] = useState({ email: '', password: '' });
+  const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
-  const validatorConfig = {
-    email: {
-      isRequired: { message: 'Электронная почта обязательна для заполнения' },
-      isEmail: { message: 'Электронная почта введена некорректно' },
-    },
-    password: {
-      isRequired: { message: 'Пароль обязателен для заполнения' },
-      isCapitalSymbol: { message: 'Пароль должен содержать хотя бы одну заглавную букву' },
-      isContainDigit: { message: 'Пароль должен содержать хотя бы одну цифру' },
-      min: { message: 'Пароль должен состоять минимум из 8 символов', value: 8 },
-    },
-  };
-  const handleChange = ({ target }) => {
+  const validateScheme = yup.object().shape({
+    password: yup
+      .string()
+      .required('Пароль обязателен для заполнения')
+      .matches(/(?=.*[A-Z])/, 'Пароль должен содержать хотя бы одну заглавную букву')
+      .matches(/(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
+      .matches(/(?=.*[!@#$%^&*])/, 'Пароль должен содержать хотя бы один специальный символ')
+      .matches(/(?=.{8,})/, 'Пароль должен состоять минимум из 8 символов'),
+    email: yup
+      .string()
+      .required('Электронная почта обязательна для заполнения')
+      .email('Электронная почта введена некорректно'),
+  });
+  const handleChange = target => {
     setData(prevState => ({ ...prevState, [target.name]: target.value }));
   };
   const validate = () => {
-    const newErrors = validator(data, validatorConfig);
-    setErrors(newErrors);
+    validateScheme
+      .validate(data)
+      .then(() => setErrors({}))
+      .catch(err => setErrors({ [err.path]: err.message }));
     return Object.keys(errors).length === 0;
   };
   const isDisable = Object.keys(errors).length === 0;
@@ -36,33 +40,29 @@ const LoginForm = () => {
     validate();
   }, [data]);
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-6 offset-md-3 shadow p-4">
-          <h3 className="mb-4">Вход</h3>
-          <form className="" onSubmit={handleSubmit}>
-            <TextField
-              label="Электронная почта"
-              name="email"
-              value={data.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
-            <TextField
-              label="Пароль"
-              type="password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              error={errors.password}
-            />
-            <button type="submit" className="btn btn-primary w-100 mx-auto" disabled={!isDisable}>
-              Войти
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <form className="" onSubmit={handleSubmit}>
+      <TextField
+        label="Электронная почта"
+        name="email"
+        value={data.email}
+        onChange={handleChange}
+        error={errors.email}
+      />
+      <TextField
+        label="Пароль"
+        type="password"
+        name="password"
+        value={data.password}
+        onChange={handleChange}
+        error={errors.password}
+      />
+      <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
+        Оставаться в системе
+      </CheckBoxField>
+      <button type="submit" className="btn btn-primary w-100 mx-auto" disabled={!isDisable}>
+        Войти
+      </button>
+    </form>
   );
 };
 
