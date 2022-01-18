@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import Qualities from '../../sharedComponents/qualities';
 
 const User = ({ userId, getById }) => {
-  const history = useHistory();
   const [user, setUser] = useState();
   useEffect(() => {
     getById(userId).then(data => {
       setUser(data);
     }, []);
   }, [getById, userId]);
-  const handleReturn = () => {
-    history.push('/users');
-  };
   if (user) {
     return (
       <div className="mx-4">
@@ -22,14 +18,9 @@ const User = ({ userId, getById }) => {
         <Qualities qualities={user.qualities} />
         <p>Встретился раз: {user.completedMeetings}</p>
         <h3>Оценка: {user.rate}</h3>
-        <button
-          type="button"
-          onClick={() => {
-            handleReturn();
-          }}
-        >
-          Все пользователи
-        </button>
+        <Link type="button" className="btn btn-dark" to={`/users/${userId}/edit`}>
+          Изменить
+        </Link>
       </div>
     );
   }
