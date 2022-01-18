@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 
-const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
+const MultiSelectField = ({ options, onChange, name, label, defaultValue, error }) => {
   const optionsArray =
     !Array.isArray(options) && typeof options === 'object'
       ? Object.keys(options).map(optionName => ({
@@ -13,6 +13,9 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
   const handleChange = value => {
     onChange({ name, value });
   };
+  const getInputClasses = () => {
+    return `basic-multi-select${error ? ' is-invalid' : ''}`;
+  };
   return (
     <div className="mb-4">
       <label className="form-label">{label}</label>
@@ -20,12 +23,13 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
         isMulti
         closeMenuOnSelect={false}
         options={optionsArray}
-        className="basic-multi-select"
+        className={getInputClasses()}
         classNamePrefix="select"
         onChange={handleChange}
         name={name}
         defaultValue={defaultValue}
       />
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };
@@ -36,6 +40,7 @@ MultiSelectField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   defaultValue: PropTypes.array.isRequired,
+  error: PropTypes.string,
 };
 
 export default MultiSelectField;

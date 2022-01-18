@@ -38,6 +38,7 @@ const RegisterForm = () => {
         [true],
         'Вы не можете использовать наш сервис без подтверждения лицензионного соглашения'
       ),
+    qualities: yup.array().min(1, 'Выберите хотя бы одно свое качество'),
     profession: yup.string().required('Обязательно выберите вашу профессию'),
     password: yup
       .string()
@@ -111,6 +112,7 @@ const RegisterForm = () => {
         defaultValue={data.qualities}
         name="qualities"
         label="Выберите ваши качества"
+        error={errors.qualities}
       />
       <CheckBoxField
         value={data.licence}
@@ -121,7 +123,7 @@ const RegisterForm = () => {
         Подтвердить <a>лицензионное соглашение</a>
       </CheckBoxField>
       <button type="submit" className="btn btn-primary w-100 mx-auto" disabled={!isValid}>
-        Войти
+        Зарегистрироваться
       </button>
     </form>
   );
