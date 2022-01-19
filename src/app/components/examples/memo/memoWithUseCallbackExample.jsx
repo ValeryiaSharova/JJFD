@@ -17,7 +17,7 @@ LogOutButton.propTypes = {
 };
 
 function areEqual(prevState, nextState) {
-    if (prevState.onLogOut !== nextState.onLogOut) {
+    if (prevState?.onLogOut !== nextState?.onLogOut) {
         return false;
     }
     return true;
