@@ -1,5 +1,10 @@
 import React from "react";
 import CollapseWrapper from "../common/collapse";
+import withPropsStyles from "../examples/hoc/withPropsStyles";
+import withAuth from "./withAuth";
+import SimpleComponent from "./SimpleComponent";
+
+const SimpleComponentWithHOC = withAuth(withPropsStyles(SimpleComponent));
 
 const HocExercise = () => {
     return (
@@ -47,6 +52,7 @@ const HocExercise = () => {
                     <code>user</code> в <code>localStorage</code>
                 </li>
             </ul>
+            <SimpleComponentWithHOC />
         </CollapseWrapper>
     );
 };
