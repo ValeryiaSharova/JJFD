@@ -8,7 +8,6 @@ const Users = () => {
   const params = useParams();
   const [users, setUsers] = useState();
   const [professions, setProfessions] = useState();
-  const { getById } = api.users;
   useEffect(() => {
     api.users.fetchAll().then(data => {
       setUsers(data);
@@ -37,7 +36,7 @@ const Users = () => {
     return (
       <>
         {userId ? (
-          <User userId={userId} getById={getById} />
+          <User userId={userId} />
         ) : (
           <UsersList
             users={users}
