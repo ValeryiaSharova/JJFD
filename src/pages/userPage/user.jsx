@@ -1,26 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import Qualities from '../../sharedComponents/qualities';
+import { orderBy } from 'lodash';
+import UserCard from './components/userCard';
+import QualitiesCard from './components/qualitiesCard';
+import MeetingsCard from './components/meetingsCard';
+import CommentsList from './components/commentsList';
+import CommentForm from './components/commentForm';
+import api from '../../api/index';
 
-const User = ({ userId, getById }) => {
+const User = ({ userId }) => {
   const [user, setUser] = useState();
+  const [comments, setComments] = useState();
+
   useEffect(() => {
-    getById(userId).then(data => {
+    api.users.getById(userId).then(data => {
       setUser(data);
-    }, []);
-  }, [getById, userId]);
-  if (user) {
+    });
+    api.comments.fetchCommentsForUser(userId).then(data => {
+      setComments(data);
+    });
+  }, []);
+
+  const handleSubmit = data => {
+    api.comments.add(data).then(newComment => {
+      setComments([...comments, newComment]);
+    });
+  };
+
+  const handleDelete = id => {
+    api.comments.remove(id);
+    setComments(prevState => prevState.filter(x => x._id !== id));
+  };
+
+  if (user && comments) {
+    const sortedComments = orderBy(comments, ['created_at', ['desc']]);
     return (
-      <div className="mx-4">
-        <h1>{user.name}</h1>
-        <h3>Профессия: {user.profession.name}</h3>
-        <Qualities qualities={user.qualities} />
-        <p>Встретился раз: {user.completedMeetings}</p>
-        <h3>Оценка: {user.rate}</h3>
-        <Link type="button" className="btn btn-dark" to={`/users/${userId}/edit`}>
-          Изменить
-        </Link>
+      <div className="container">
+        <div className="row gutters-sm">
+          <div className="col-md-4 mb-3">
+            <UserCard user={user} userId={userId} />
+            <QualitiesCard qualities={user.qualities} />
+            <MeetingsCard meetings={user.completedMeetings} />
+          </div>
+          <div className="col-md-8">
+            <CommentForm onSubmit={handleSubmit} pageId={userId} />
+            <CommentsList comments={sortedComments} handleDelete={handleDelete} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -29,7 +55,6 @@ const User = ({ userId, getById }) => {
 
 User.propTypes = {
   userId: PropTypes.string.isRequired,
-  getById: PropTypes.func.isRequired,
 };
 
 export default User;
