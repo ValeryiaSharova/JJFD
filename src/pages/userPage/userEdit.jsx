@@ -43,6 +43,10 @@ const UserEdit = () => {
     setUser(prevState => ({ ...prevState, [target.name]: target.value }));
   };
 
+  const handleBackClick = () => {
+    history.push(`/users/${userId}`);
+  };
+
   const validateScheme = yup.object().shape({
     qualities: yup.array().min(1, 'Выберите хотя бы одно свое качество'),
     email: yup
@@ -96,6 +100,10 @@ const UserEdit = () => {
     <>
       {user && professions ? (
         <div className="container mt-5">
+          <button className="btn btn-primary" type="button" onClick={handleBackClick}>
+            <i className="bi bi-arrow-left-square pe-2" />
+            Назад
+          </button>
           <div className="row">
             <div className="col-md-6 offset-md-3 shadow p-4">
               <form onSubmit={handleSubmit}>
