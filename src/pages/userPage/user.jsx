@@ -44,7 +44,9 @@ const User = ({ userId }) => {
           </div>
           <div className="col-md-8">
             <CommentForm onSubmit={handleSubmit} pageId={userId} />
-            <CommentsList comments={sortedComments} handleDelete={handleDelete} />
+            {sortedComments.length !== 0 && (
+              <CommentsList comments={sortedComments} handleDelete={handleDelete} />
+            )}
           </div>
         </div>
       </div>
