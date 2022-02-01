@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import Qualities from '../../../sharedComponents/qualities';
 import Bookmark from '../../../sharedComponents/bookmark';
 import Table from '../../../sharedComponents/table/table';
+import Profession from './profession';
 
 const UsersTable = ({ users, onSort, selectedSort, handleToggleBookmark, handleDelete }) => {
   const columns = {
     name: { path: 'name', name: 'Имя' },
-    qualities: { name: 'Качества', component: user => <Qualities qualities={user.qualities} /> },
-    profession: { path: 'profession.name', name: 'Профессия' },
+    qualities: { name: 'Качества', component: user => <Qualities qualitiesId={user.qualities} /> },
+    profession: { name: 'Профессия', component: user => <Profession id={user.profession} /> },
     completedMeetings: { path: 'completedMeetings', name: 'Встретился, раз' },
     rate: { path: 'rate', name: 'Оценка' },
     bookmark: {
