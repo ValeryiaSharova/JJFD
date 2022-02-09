@@ -1,20 +1,18 @@
 /* eslint-disable no-useless-return */
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-dom';
 import TextField from '../../../sharedComponents/form/textField';
 import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
+import { useAuth } from '../../../hooks/useAuth';
 
 const LoginForm = () => {
+  const history = useHistory();
+  const { logIn } = useAuth();
   const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
   const validateScheme = yup.object().shape({
-    password: yup
-      .string()
-      .required('Пароль обязателен для заполнения')
-      .matches(/(?=.*[A-Z])/, 'Пароль должен содержать хотя бы одну заглавную букву')
-      .matches(/(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
-      .matches(/(?=.*[!@#$%^&*])/, 'Пароль должен содержать хотя бы один специальный символ')
-      .matches(/(?=.{8,})/, 'Пароль должен состоять минимум из 8 символов'),
+    password: yup.string().required('Пароль обязателен для заполнения'),
     email: yup
       .string()
       .required('Электронная почта обязательна для заполнения')
@@ -31,10 +29,16 @@ const LoginForm = () => {
     return Object.keys(errors).length === 0;
   };
   const isDisable = Object.keys(errors).length === 0;
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
+    try {
+      await logIn(data);
+      history.push('/');
+    } catch (error) {
+      setErrors(error);
+    }
   };
   useEffect(() => {
     validate();
