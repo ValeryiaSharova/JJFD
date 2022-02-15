@@ -21,6 +21,7 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
+  const [isLoading, setLoading] = useState(true);
 
   async function createUser(data) {
     try {
@@ -74,7 +75,7 @@ const AuthProvider = ({ children }) => {
         returnSecureToken: true,
       });
       setTokens(data);
-      getUserData();
+      await getUserData();
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -98,12 +99,16 @@ const AuthProvider = ({ children }) => {
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
     if (getAccessToken()) {
       getUserData();
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -115,7 +120,9 @@ const AuthProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <AuthContext.Provider value={{ signUp, currentUser, logIn }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signUp, currentUser, logIn }}>
+      {!isLoading ? children : 'Загрузка'}
+    </AuthContext.Provider>
   );
 };
 
