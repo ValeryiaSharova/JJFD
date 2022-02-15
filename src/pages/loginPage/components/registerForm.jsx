@@ -18,6 +18,7 @@ const RegisterForm = () => {
     password: '',
     profession: '',
     sex: 'Мужской',
+    name: '',
     qualities: [],
     licence: false,
   });
@@ -25,6 +26,7 @@ const RegisterForm = () => {
   const { profession } = useProfessions();
   const { qualities } = useQualities();
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
+
   const [errors, setErrors] = useState({});
 
   const handleChange = target => {
@@ -46,6 +48,10 @@ const RegisterForm = () => {
       .matches(/(?=.*[0-9])/, 'Пароль должен содержать хотя бы одну цифру')
       .matches(/(?=.*[!@#$%^&*])/, 'Пароль должен содержать хотя бы один специальный символ')
       .matches(/(?=.{8,})/, 'Пароль должен состоять минимум из 8 символов'),
+    name: yup
+      .string()
+      .required('Имя обязательно для заполнения')
+      .min(3, 'Имя должно состоять минимум из трех символов'),
     email: yup
       .string()
       .required('Электронная почта обязательна для заполнения')
@@ -84,6 +90,13 @@ const RegisterForm = () => {
         value={data.email}
         onChange={handleChange}
         error={errors.email}
+      />
+      <TextField
+        label="Имя"
+        name="name"
+        value={data.name}
+        onChange={handleChange}
+        error={errors.name}
       />
       <TextField
         label="Пароль"
