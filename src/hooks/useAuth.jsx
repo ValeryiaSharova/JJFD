@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import userService from '../services/user.service';
-import { setTokens } from '../services/localStorage.service';
+import { setTokens, getAccessToken } from '../services/localStorage.service';
 
-const httpAuth = axios.create();
+export const httpAuth = axios.create({
+  baseURL: 'https://identitytoolkit.googleapis.com/v1/',
+  params: {
+    key: process.env.REACT_APP_FIREBASE_KEY,
+  },
+});
 
 const AuthContext = React.createContext();
 
@@ -14,33 +19,37 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
 
   async function createUser(data) {
     try {
-      const { content } = userService.create(data);
+      const { content } = await userService.create(data);
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
     }
   }
 
-  async function getUser(id) {
-    try {
-      const { content } = userService.getById(id);
-      setCurrentUser(content);
-    } catch (error) {
-      errorCatcher(error);
-    }
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
   async function signUp({ email, password, ...rest }) {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
     try {
-      const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
+      const { data } = await httpAuth.post('accounts:signUp', {
+        email,
+        password,
+        returnSecureToken: true,
+      });
       setTokens(data);
-      await createUser({ _id: data.localId, email, ...rest });
+      await createUser({
+        _id: data.localId,
+        email,
+        rate: randomInt(1, 5),
+        completedMeetings: randomInt(0, 200),
+        ...rest,
+      });
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -58,11 +67,14 @@ const AuthProvider = ({ children }) => {
   }
 
   async function logIn({ email, password }) {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
     try {
-      const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
+      const { data } = await httpAuth.post('accounts:signInWithPassword', {
+        email,
+        password,
+        returnSecureToken: true,
+      });
       setTokens(data);
-      await getUser(data.localId);
+      getUserData();
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -79,6 +91,21 @@ const AuthProvider = ({ children }) => {
     const { message } = error.response.data;
     setError(message);
   }
+
+  async function getUserData() {
+    try {
+      const { content } = await userService.getCurrentUser();
+      setCurrentUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  useEffect(() => {
+    if (getAccessToken()) {
+      getUserData();
+    }
+  }, []);
 
   useEffect(() => {
     if (error !== null) {
