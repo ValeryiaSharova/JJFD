@@ -10,6 +10,7 @@ import { ProfessionProvider } from './hooks/useProfession';
 import { QualitiesProvider } from './hooks/useQualities';
 import AuthProvider from './hooks/useAuth';
 import ProtectedRoute from './components/protectedRoute';
+import LogOut from './components/logOut';
 
 const App = () => (
   <>
@@ -19,6 +20,7 @@ const App = () => (
         <QualitiesProvider>
           <ProfessionProvider>
             <Route path="/" exact component={Main} />
+            <Route path="/logout" component={LogOut} />
             <Route path="/login/:type?" component={Login} />
             <ProtectedRoute path="/users/:userId?" component={Users} />
             <ProtectedRoute path="/users/:userId?/edit" component={UserEdit} />

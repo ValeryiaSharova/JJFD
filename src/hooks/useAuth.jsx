@@ -2,8 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 import userService from '../services/user.service';
-import { setTokens, getAccessToken } from '../services/localStorage.service';
+import localStorageService from '../services/localStorage.service';
 
 export const httpAuth = axios.create({
   baseURL: 'https://identitytoolkit.googleapis.com/v1/',
@@ -22,6 +23,7 @@ const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [error, setError] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const history = useHistory();
 
   async function createUser(data) {
     try {
@@ -43,7 +45,7 @@ const AuthProvider = ({ children }) => {
         password,
         returnSecureToken: true,
       });
-      setTokens(data);
+      localStorageService.setTokens(data);
       await createUser({
         _id: data.localId,
         email,
@@ -74,7 +76,7 @@ const AuthProvider = ({ children }) => {
         password,
         returnSecureToken: true,
       });
-      setTokens(data);
+      localStorageService.setTokens(data);
       await getUserData();
     } catch (error) {
       errorCatcher(error);
@@ -86,6 +88,12 @@ const AuthProvider = ({ children }) => {
         }
       }
     }
+  }
+
+  function logOut() {
+    localStorageService.removeAuthData();
+    setCurrentUser(null);
+    history.push('/');
   }
 
   function errorCatcher(error) {
@@ -105,7 +113,7 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (getAccessToken()) {
+    if (localStorageService.getAccessToken()) {
       getUserData();
     } else {
       setLoading(false);
@@ -120,7 +128,7 @@ const AuthProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <AuthContext.Provider value={{ signUp, currentUser, logIn }}>
+    <AuthContext.Provider value={{ signUp, currentUser, logIn, logOut }}>
       {!isLoading ? children : 'Загрузка'}
     </AuthContext.Provider>
   );
