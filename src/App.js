@@ -9,6 +9,7 @@ import UserEdit from './pages/userPage/userEdit';
 import { ProfessionProvider } from './hooks/useProfession';
 import { QualitiesProvider } from './hooks/useQualities';
 import AuthProvider from './hooks/useAuth';
+import ProtectedRoute from './components/protectedRoute';
 
 const App = () => (
   <>
@@ -17,10 +18,10 @@ const App = () => (
       <Switch>
         <QualitiesProvider>
           <ProfessionProvider>
-            <Route path="/login/:type?" component={Login} />
-            <Route path="/users/:userId?" component={Users} />
             <Route path="/" exact component={Main} />
-            <Route path="/users/:userId?/edit" component={UserEdit} />
+            <Route path="/login/:type?" component={Login} />
+            <ProtectedRoute path="/users/:userId?" component={Users} />
+            <ProtectedRoute path="/users/:userId?/edit" component={UserEdit} />
           </ProfessionProvider>
         </QualitiesProvider>
       </Switch>
