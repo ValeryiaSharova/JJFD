@@ -34,10 +34,10 @@ const User = ({ userId }) => {
   if (user && comments) {
     const sortedComments = orderBy(comments, ['created_at', ['desc']]);
     return (
-      <div className="container">
+      <div className="container mt-4">
         <div className="row gutters-sm">
           <div className="col-md-4 mb-3">
-            <UserCard user={user} userId={userId} />
+            <UserCard user={user} />
             <QualitiesCard qualitiesId={user.qualities} />
             <MeetingsCard meetings={user.completedMeetings} />
           </div>

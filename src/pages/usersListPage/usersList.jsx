@@ -8,9 +8,11 @@ import UsersTable from './components/usersTable';
 import Search from '../../sharedComponents/search';
 import { useUser } from '../../hooks/useUsers';
 import { useProfessions } from '../../hooks/useProfession';
+import { useAuth } from '../../hooks/useAuth';
 
 const UsersList = () => {
   const { users } = useUser();
+  const { currentUser } = useAuth();
   const { professions, isLoading: professionsLoading } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
@@ -50,11 +52,15 @@ const UsersList = () => {
     setSortBy(item);
   };
 
-  const filteredUsers = searchValue
-    ? users.filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()))
-    : selectedProf
-    ? users.filter(user => _.isEqual(user.profession, selectedProf))
-    : users;
+  function filterUsers(data) {
+    const filteredUsers = searchValue
+      ? data.filter(user => user.name.toLowerCase().includes(searchValue.toLowerCase()))
+      : selectedProf
+      ? data.filter(user => _.isEqual(user.profession, selectedProf))
+      : data;
+    return filteredUsers.filter(user => user._id !== currentUser._id);
+  }
+  const filteredUsers = filterUsers(users);
   const count = filteredUsers.length;
   const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
   const userCrop = paginate(sortedUsers, currentPage, pageSize);

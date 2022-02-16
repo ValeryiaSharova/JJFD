@@ -1,18 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useAuth } from '../../../hooks/useAuth';
 
-const UserCard = ({ user, userId }) => {
+const UserCard = ({ user }) => {
+  const { currentUser } = useAuth();
   return (
     <div className="card mb-3">
       <div className="card-body">
-        <Link
-          type="button"
-          className="position-absolute top-0 end-0 btn btn-light btn-sm"
-          to={`/users/${userId}/edit`}
-        >
-          <i className="bi bi-gear" />
-        </Link>
+        {currentUser._id === user._id ? (
+          <Link
+            type="button"
+            className="position-absolute top-0 end-0 btn btn-light btn-sm"
+            to={`/users/${user._id}/edit`}
+          >
+            <i className="bi bi-gear" />
+          </Link>
+        ) : null}
+
         <div className="d-flex flex-column align-items-center text-center position-relative">
           <img
             src={user.image}
@@ -38,7 +43,6 @@ const UserCard = ({ user, userId }) => {
 
 UserCard.propTypes = {
   user: PropTypes.object.isRequired,
-  userId: PropTypes.string.isRequired,
 };
 
 export default UserCard;
