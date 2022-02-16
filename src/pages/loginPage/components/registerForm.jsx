@@ -23,7 +23,7 @@ const RegisterForm = () => {
     licence: false,
   });
   const { signUp } = useAuth();
-  const { profession } = useProfessions();
+  const { professions } = useProfessions();
   const { qualities } = useQualities();
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
 
@@ -109,7 +109,7 @@ const RegisterForm = () => {
       <SelectField
         label="Выберите вашу профессию"
         defaultOption="Choose..."
-        options={profession}
+        options={professions}
         name="profession"
         onChange={handleChange}
         value={data.profession}
