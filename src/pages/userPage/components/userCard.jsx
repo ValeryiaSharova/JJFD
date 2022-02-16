@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ProfileImages from '../../../components/profileImages';
 
 const UserCard = ({ user, userId }) => {
   return (
@@ -15,7 +14,13 @@ const UserCard = ({ user, userId }) => {
           <i className="bi bi-gear" />
         </Link>
         <div className="d-flex flex-column align-items-center text-center position-relative">
-          <ProfileImages />
+          <img
+            src={user.image}
+            className="rounded-circle shadow-1-strong me-3"
+            alt="avatar"
+            width="65"
+            height="65"
+          />
           <div className="mt-3">
             <h4>{user.name}</h4>
             <p className="text-secondary mb-1">{user.profession.name}</p>
