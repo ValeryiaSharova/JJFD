@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Qualities from '../../../sharedComponents/qualities';
 
-const QualitiesCard = ({ qualities }) => {
+const QualitiesCard = ({ qualitiesId }) => {
+  console.log(qualitiesId);
   return (
     <div className="card mb-3">
       <div className="card-body d-flex flex-column justify-content-center text-center ">
@@ -10,7 +11,7 @@ const QualitiesCard = ({ qualities }) => {
           <span>Качества</span>
         </h5>
         <p className="card-text">
-          <Qualities qualities={qualities} />
+          <Qualities qualitiesId={qualitiesId} />
         </p>
       </div>
     </div>
@@ -18,7 +19,7 @@ const QualitiesCard = ({ qualities }) => {
 };
 
 QualitiesCard.propTypes = {
-  qualities: PropTypes.array.isRequired,
+  qualitiesId: PropTypes.array.isRequired,
 };
 
 export default QualitiesCard;

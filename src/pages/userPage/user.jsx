@@ -7,15 +7,14 @@ import MeetingsCard from './components/meetingsCard';
 import CommentsList from './components/commentsList';
 import CommentForm from './components/commentForm';
 import api from '../../api/index';
+import { useUser } from '../../hooks/useUsers';
 
 const User = ({ userId }) => {
-  const [user, setUser] = useState();
+  const { getUserById } = useUser();
+  const user = getUserById(userId);
   const [comments, setComments] = useState();
 
   useEffect(() => {
-    api.users.getById(userId).then(data => {
-      setUser(data);
-    });
     api.comments.fetchCommentsForUser(userId).then(data => {
       setComments(data);
     });
@@ -39,7 +38,7 @@ const User = ({ userId }) => {
         <div className="row gutters-sm">
           <div className="col-md-4 mb-3">
             <UserCard user={user} userId={userId} />
-            <QualitiesCard qualities={user.qualities} />
+            <QualitiesCard qualitiesId={user.qualities} />
             <MeetingsCard meetings={user.completedMeetings} />
           </div>
           <div className="col-md-8">
