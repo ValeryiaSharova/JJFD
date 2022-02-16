@@ -5,7 +5,7 @@ import Bookmark from '../../../sharedComponents/bookmark';
 import Table from '../../../sharedComponents/table/table';
 import Profession from './profession';
 
-const UsersTable = ({ users, onSort, selectedSort, handleToggleBookmark, handleDelete }) => {
+const UsersTable = ({ users, onSort, selectedSort, handleToggleBookmark }) => {
   const columns = {
     name: { path: 'name', name: 'Имя' },
     qualities: { name: 'Качества', component: user => <Qualities qualitiesId={user.qualities} /> },
@@ -23,20 +23,12 @@ const UsersTable = ({ users, onSort, selectedSort, handleToggleBookmark, handleD
         />
       ),
     },
-    delete: {
-      component: user => (
-        <button type="button" className="btn btn-danger" onClick={() => handleDelete(user._id)}>
-          delete
-        </button>
-      ),
-    },
   };
   return <Table onSort={onSort} selectedSort={selectedSort} data={users} columns={columns} />;
 };
 
 UsersTable.propTypes = {
   users: PropTypes.array.isRequired,
-  handleDelete: PropTypes.func.isRequired,
   handleToggleBookmark: PropTypes.func.isRequired,
   onSort: PropTypes.func.isRequired,
   selectedSort: PropTypes.object.isRequired,

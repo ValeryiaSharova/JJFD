@@ -7,23 +7,16 @@ import Pagination from '../../sharedComponents/pagination';
 import UsersTable from './components/usersTable';
 import Search from '../../sharedComponents/search';
 import { useUser } from '../../hooks/useUsers';
-import api from '../../api';
+import { useProfessions } from '../../hooks/useProfession';
 
 const UsersList = () => {
+  const { users } = useUser();
+  const { professions, isLoading: professionsLoading } = useProfessions();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: 'name', order: 'asc' });
   const [searchValue, setSearchValue] = useState('');
   const pageSize = 8;
-  const [professions, setProfessions] = useState();
-
-  useEffect(() => {
-    api.professions.fetchAll().then(data => {
-      setProfessions(data);
-    });
-  }, []);
-
-  const { users } = useUser();
 
   const handleDelete = userId => {
     // setUsers(users.filter(user => user._id !== userId));
@@ -77,7 +70,7 @@ const UsersList = () => {
 
   return (
     <div className="d-flex">
-      {professions && (
+      {professions && !professionsLoading && (
         <div className="d-flex flex-column flex-shrink-0 p-3">
           <GroupList
             selectedItem={selectedProf}
