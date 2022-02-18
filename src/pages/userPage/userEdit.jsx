@@ -1,43 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import api from '../../api/index';
 import TextField from '../../sharedComponents/form/textField';
 import SelectField from '../../sharedComponents/form/selectField';
 import RadioField from '../../sharedComponents/form/radioField';
 import MultiSelectField from '../../sharedComponents/form/multiSelectField';
+import { useProfessions } from '../../hooks/useProfession';
+import { useQualities } from '../../hooks/useQualities';
+import { useAuth } from '../../hooks/useAuth';
 
 const UserEdit = () => {
   const history = useHistory();
   const { userId } = useParams();
+  const { currentUser, updateUserData } = useAuth();
   const [user, setUser] = useState();
-  const [professions, setProfessions] = useState();
-  const [qualities, setQualities] = useState({});
+  const [rightQualities, setRightQualities] = useState();
+  const { professions, isLoading: professionsLoading } = useProfessions();
+  const { qualities, isLoading: qualitiesLoading } = useQualities();
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    api.users.getById(userId).then(data => {
-      const updateData = Object.keys(data).reduce((prev, field) => {
+    if (!qualitiesLoading) {
+      const updateData = Object.keys(currentUser).reduce((prev, field) => {
         if (field === 'qualities') {
           prev[field] = [
-            ...data[field].map(qualitie => ({ label: qualitie.name, value: qualitie._id })),
+            ...currentUser[field].map(qualitie => ({
+              label: qualities.find(q => q._id === qualitie).name,
+              value: qualitie,
+            })),
           ];
-        } else if (field === 'profession') {
-          prev[field] = data[field]._id;
         } else {
-          prev[field] = data[field];
+          prev[field] = currentUser[field];
         }
         return prev;
       }, {});
       setUser(updateData);
-    });
-    api.professions.fetchAll().then(data => {
-      setProfessions(data);
-    });
-    api.qualities.fetchAll().then(data => {
-      setQualities(data);
-    });
-  }, []);
+      const rightQualities = qualities.map(q => ({ label: q.name, value: q._id }));
+      setRightQualities(rightQualities);
+    }
+  }, [qualitiesLoading]);
 
   const handleChange = target => {
     setUser(prevState => ({ ...prevState, [target.name]: target.value }));
@@ -70,27 +71,15 @@ const UserEdit = () => {
     e.preventDefault();
     const updateData = Object.keys(user).reduce((prev, field) => {
       if (field === 'qualities') {
-        prev[field] = [
-          ...user.qualities.reduce((prev, elem) => {
-            Object.keys(qualities).forEach(key => {
-              if (qualities[key]._id === elem.value) {
-                prev.push(qualities[key]);
-              }
-            });
-            return prev;
-          }, []),
-        ];
+        prev[field] = [...user[field].map(q => q.value)];
       } else if (field === 'profession') {
-        prev[field] = professions.reduce((prev, profession) => {
-          if (profession._id === user.profession) prev = { ...profession };
-          return prev;
-        }, {});
+        prev[field] = user[field];
       } else {
         prev[field] = user[field];
       }
       return prev;
     }, {});
-    api.users.update(user._id, updateData);
+    updateUserData(updateData);
     history.push(`/users/${userId}`);
   };
   useEffect(() => {
@@ -98,9 +87,9 @@ const UserEdit = () => {
   }, [user]);
   return (
     <>
-      {user && professions ? (
+      {user && !professionsLoading && !qualitiesLoading ? (
         <div className="container mt-5">
-          <button className="btn btn-primary" type="button" onClick={handleBackClick}>
+          <button className="btn btn-primary mb-4" type="button" onClick={handleBackClick}>
             <i className="bi bi-arrow-left-square pe-2" />
             Назад
           </button>
@@ -141,7 +130,7 @@ const UserEdit = () => {
                   label="Выберите ваш пол"
                 />
                 <MultiSelectField
-                  options={qualities}
+                  options={rightQualities}
                   onChange={handleChange}
                   defaultValue={user.qualities}
                   name="qualities"
