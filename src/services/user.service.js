@@ -16,6 +16,10 @@ const userService = {
     const { data } = await httpService.get(userEndPoint + getUserId());
     return data;
   },
+  updateCurrentUser: async payload => {
+    const { data } = await httpService.patch(userEndPoint + payload._id, payload);
+    return data;
+  },
 };
 
 export default userService;
