@@ -2,14 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import TextField from '../../../sharedComponents/form/textField';
 import SelectField from '../../../sharedComponents/form/selectField';
 import RadioField from '../../../sharedComponents/form/radioField';
 import MultiSelectField from '../../../sharedComponents/form/multiSelectField';
 import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
-import { useQualities } from '../../../hooks/useQualities';
 import { useProfessions } from '../../../hooks/useProfession';
 import { useAuth } from '../../../hooks/useAuth';
+import { getQualities } from '../../../store/qualities';
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -24,7 +25,7 @@ const RegisterForm = () => {
   });
   const { signUp } = useAuth();
   const { professions } = useProfessions();
-  const { qualities } = useQualities();
+  const qualities = useSelector(getQualities());
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
 
   const [errors, setErrors] = useState({});

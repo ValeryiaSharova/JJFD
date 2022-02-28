@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Qualities from '../../../sharedComponents/qualities';
+import Qualities from '../../../components/qualities';
 
 const QualitiesCard = ({ qualitiesId }) => {
   return (

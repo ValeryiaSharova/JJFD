@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import * as yup from 'yup';
+import { useSelector } from 'react-redux';
 import TextField from '../../sharedComponents/form/textField';
 import SelectField from '../../sharedComponents/form/selectField';
 import RadioField from '../../sharedComponents/form/radioField';
 import MultiSelectField from '../../sharedComponents/form/multiSelectField';
 import { useProfessions } from '../../hooks/useProfession';
-import { useQualities } from '../../hooks/useQualities';
 import { useAuth } from '../../hooks/useAuth';
+import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities';
 
 const UserEdit = () => {
   const history = useHistory();
@@ -16,7 +17,8 @@ const UserEdit = () => {
   const [user, setUser] = useState();
   const [rightQualities, setRightQualities] = useState();
   const { professions, isLoading: professionsLoading } = useProfessions();
-  const { qualities, isLoading: qualitiesLoading } = useQualities();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
