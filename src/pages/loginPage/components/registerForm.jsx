@@ -8,9 +8,9 @@ import SelectField from '../../../sharedComponents/form/selectField';
 import RadioField from '../../../sharedComponents/form/radioField';
 import MultiSelectField from '../../../sharedComponents/form/multiSelectField';
 import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
-import { useProfessions } from '../../../hooks/useProfession';
 import { useAuth } from '../../../hooks/useAuth';
 import { getQualities } from '../../../store/qualities';
+import { getProfessions } from '../../../store/profession';
 
 const RegisterForm = () => {
   const history = useHistory();
@@ -24,7 +24,7 @@ const RegisterForm = () => {
     licence: false,
   });
   const { signUp } = useAuth();
-  const { professions } = useProfessions();
+  const professions = useSelector(getProfessions());
   const qualities = useSelector(getQualities());
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
 

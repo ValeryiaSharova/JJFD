@@ -6,9 +6,9 @@ import TextField from '../../sharedComponents/form/textField';
 import SelectField from '../../sharedComponents/form/selectField';
 import RadioField from '../../sharedComponents/form/radioField';
 import MultiSelectField from '../../sharedComponents/form/multiSelectField';
-import { useProfessions } from '../../hooks/useProfession';
 import { useAuth } from '../../hooks/useAuth';
 import { getQualities, getQualitiesLoadingStatus } from '../../store/qualities';
+import { getProfessions, getProfessionsLoadingStatus } from '../../store/profession';
 
 const UserEdit = () => {
   const history = useHistory();
@@ -16,7 +16,8 @@ const UserEdit = () => {
   const { currentUser, updateUserData } = useAuth();
   const [user, setUser] = useState();
   const [rightQualities, setRightQualities] = useState();
-  const { professions, isLoading: professionsLoading } = useProfessions();
+  const professions = useSelector(getProfessions());
+  const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const qualities = useSelector(getQualities());
   const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const [errors, setErrors] = useState({});
