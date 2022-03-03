@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { orderBy } from 'lodash';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import CommentForm from './commentForm';
 import Comment from './comment';
-import { useComments } from '../../../hooks/useComments';
 import { getCurrentUserId } from '../../../store/users';
+import {
+  createComment,
+  getComments,
+  getCommentsLoadingStatus,
+  loadCommentsList,
+  removeComment,
+} from '../../../store/comments';
 
 const Comments = () => {
+  const { userId } = useParams();
   const currentUserId = useSelector(getCurrentUserId());
-  const { comments, createComment, removeComment } = useComments();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadCommentsList(userId));
+  }, [userId]);
+  const isLoading = useSelector(getCommentsLoadingStatus());
+  const comments = useSelector(getComments());
 
   const handleSubmit = data => {
-    createComment(data);
+    dispatch(createComment(data, currentUserId, userId));
   };
 
   const handleDelete = id => {
-    removeComment(id);
+    dispatch(removeComment(id));
   };
 
   if (comments) {
@@ -28,9 +41,13 @@ const Comments = () => {
             <div className="card-body">
               <h2>Коментарии</h2>
               <hr />
-              {comments.map(comment => (
-                <Comment comment={comment} handleDelete={handleDelete} key={comment._id} />
-              ))}
+              {!isLoading ? (
+                comments.map(comment => (
+                  <Comment comment={comment} handleDelete={handleDelete} key={comment._id} />
+                ))
+              ) : (
+                <h1>Загрузка...</h1>
+              )}
             </div>
           </div>
         )}

@@ -21,10 +21,6 @@ const UsersList = () => {
   const [searchValue, setSearchValue] = useState('');
   const pageSize = 8;
 
-  const handleDelete = userId => {
-    // setUsers(users.filter(user => user._id !== userId));
-    console.log(userId);
-  };
   const handleToggleBookmark = id => {
     const updateUsers = users.map(user => {
       if (user._id === id) {
@@ -95,7 +91,6 @@ const UsersList = () => {
         {count > 0 ? (
           <UsersTable
             users={userCrop}
-            handleDelete={handleDelete}
             handleToggleBookmark={handleToggleBookmark}
             onSort={handleSort}
             selectedSort={sortBy}
