@@ -1,0 +1,63 @@
+h1.badge {
+  font-size: 24px;
+  margin: 2px;
+}
+
+span.badge {
+  font-size: 14px;
+}
+
+.center-elem {
+  text-align: center;
+}
+
+td:nth-child(1) {
+  text-align: left;
+}
+
+td:nth-child(2) {
+  width: 350px;
+}
+
+td:nth-child(1) {
+  width: 160px;
+}
+
+td:nth-child(3) {
+  width: 160px;
+}
+
+.table {
+  min-height: 530px;
+  display: block;
+}
+
+.bi {
+  cursor: pointer;
+}
+
+.link {
+  text-decoration: none;
+  color: black;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+.nav-link {
+  color: black;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link:visited {
+  color: black;
+  text-decoration: underline;
+}
+
+.phrase {
+  display: flex;
+  width: fit-content;
+}
