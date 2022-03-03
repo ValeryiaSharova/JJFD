@@ -2,12 +2,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import UsersList from '../usersListPage/usersList';
 import User from '../userPage/user';
-import UserProvider from '../../hooks/useUsers';
+import UsersLoader from '../../components/hoc/usersLoader';
 
 const Users = () => {
   const { userId } = useParams();
-
-  return <UserProvider>{userId ? <User userId={userId} /> : <UsersList />}</UserProvider>;
+  return <UsersLoader>{userId ? <User userId={userId} /> : <UsersList />}</UsersLoader>;
 };
 
 export default Users;
