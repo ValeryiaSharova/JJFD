@@ -1,14 +1,16 @@
 /* eslint-disable no-useless-return */
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import TextField from '../../../sharedComponents/form/textField';
 import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
-import { useAuth } from '../../../hooks/useAuth';
+import { getAuthErrors, login } from '../../../store/users';
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
-  const { logIn } = useAuth();
+  const loginError = useSelector(getAuthErrors());
   const [data, setData] = useState({ email: '', password: '', stayOn: false });
   const [errors, setErrors] = useState({});
   const validateScheme = yup.object().shape({
@@ -29,16 +31,12 @@ const LoginForm = () => {
     return Object.keys(errors).length === 0;
   };
   const isDisable = Object.keys(errors).length === 0;
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
     const isValid = validate();
     if (!isValid) return;
-    try {
-      await logIn(data);
-      history.push(history.location.state ? history.location.state.from : '/');
-    } catch (error) {
-      setErrors(error);
-    }
+    const redirect = history.location.state ? history.location.state.from.pathname : '/';
+    dispatch(login({ ...data, redirect }));
   };
   useEffect(() => {
     validate();
@@ -63,6 +61,7 @@ const LoginForm = () => {
       <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
         Оставаться в системе
       </CheckBoxField>
+      {loginError && <p className="text-danger">{loginError}</p>}
       <button type="submit" className="btn btn-primary w-100 mx-auto" disabled={!isDisable}>
         Войти
       </button>

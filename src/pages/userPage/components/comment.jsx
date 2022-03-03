@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { displayDate } from '../../../utilits/displayDate';
-import { useUser } from '../../../hooks/useUsers';
-import { useAuth } from '../../../hooks/useAuth';
+import { getCurrentUserId, getUserById } from '../../../store/users';
 
 const Comment = ({ comment, handleDelete }) => {
-  const { getUserById } = useUser();
-  const { currentUser } = useAuth();
-  const user = getUserById(comment.userId);
+  const currentUserId = useSelector(getCurrentUserId());
+  const user = useSelector(getUserById(comment.userId));
 
   return (
     <div className="bg-light card-body mb-3">
@@ -28,7 +27,7 @@ const Comment = ({ comment, handleDelete }) => {
                     {user.name}
                     <span className="small">- {displayDate(Number(comment.created_at))}</span>
                   </p>
-                  {currentUser._id === user._id ? (
+                  {currentUserId === user._id ? (
                     <button
                       className="btn btn-sm text-primary d-flex align-items-center"
                       type="button"

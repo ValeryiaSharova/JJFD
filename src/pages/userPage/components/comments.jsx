@@ -1,12 +1,13 @@
 import React from 'react';
 import { orderBy } from 'lodash';
+import { useSelector } from 'react-redux';
 import CommentForm from './commentForm';
 import Comment from './comment';
-import { useAuth } from '../../../hooks/useAuth';
 import { useComments } from '../../../hooks/useComments';
+import { getCurrentUserId } from '../../../store/users';
 
 const Comments = () => {
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
   const { comments, createComment, removeComment } = useComments();
 
   const handleSubmit = data => {
@@ -21,7 +22,7 @@ const Comments = () => {
     const sortedComments = orderBy(comments, ['created_at', ['desc']]);
     return (
       <>
-        <CommentForm onSubmit={handleSubmit} pageId={currentUser._id} />
+        <CommentForm onSubmit={handleSubmit} pageId={currentUserId} />
         {sortedComments.length !== 0 && (
           <div className="card mb-3">
             <div className="card-body">

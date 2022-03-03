@@ -1,19 +1,19 @@
 /* eslint-disable no-useless-return */
 import React, { useState, useEffect } from 'react';
 import * as yup from 'yup';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TextField from '../../../sharedComponents/form/textField';
 import SelectField from '../../../sharedComponents/form/selectField';
 import RadioField from '../../../sharedComponents/form/radioField';
 import MultiSelectField from '../../../sharedComponents/form/multiSelectField';
 import CheckBoxField from '../../../sharedComponents/form/checkBoxField';
-import { useAuth } from '../../../hooks/useAuth';
 import { getQualities } from '../../../store/qualities';
 import { getProfessions } from '../../../store/profession';
 
+import { getAuthErrors, signUp } from '../../../store/users';
+
 const RegisterForm = () => {
-  const history = useHistory();
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -23,11 +23,10 @@ const RegisterForm = () => {
     qualities: [],
     licence: false,
   });
-  const { signUp } = useAuth();
   const professions = useSelector(getProfessions());
   const qualities = useSelector(getQualities());
   const qualitiesList = qualities.map(q => ({ label: q.name, value: q._id }));
-
+  const loginError = useSelector(getAuthErrors());
   const [errors, setErrors] = useState({});
 
   const handleChange = target => {
@@ -72,12 +71,7 @@ const RegisterForm = () => {
     const isValid = validate();
     if (!isValid) return;
     const newData = { ...data, qualities: data.qualities.map(q => q.value) };
-    try {
-      await signUp(newData);
-      history.push('/');
-    } catch (error) {
-      setErrors(error);
-    }
+    dispatch(signUp(newData));
   };
   useEffect(() => {
     validate();
@@ -143,6 +137,7 @@ const RegisterForm = () => {
       >
         Подтвердить <a>лицензионное соглашение</a>
       </CheckBoxField>
+      {loginError && <p className="text-danger">{loginError}</p>}
       <button type="submit" className="btn btn-primary w-100 mx-auto" disabled={!isValid}>
         Зарегистрироваться
       </button>

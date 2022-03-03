@@ -7,13 +7,12 @@ import Phrase from './components/phrase';
 import Pagination from '../../sharedComponents/pagination';
 import UsersTable from './components/usersTable';
 import Search from '../../sharedComponents/search';
-import { useUser } from '../../hooks/useUsers';
-import { useAuth } from '../../hooks/useAuth';
 import { getProfessions, getProfessionsLoadingStatus } from '../../store/profession';
+import { getCurrentUserId, getUsers } from '../../store/users';
 
 const UsersList = () => {
-  const { users } = useUser();
-  const { currentUser } = useAuth();
+  const users = useSelector(getUsers());
+  const currentUserId = useSelector(getCurrentUserId());
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,7 +59,7 @@ const UsersList = () => {
       : selectedProf
       ? data.filter(user => _.isEqual(user.profession, selectedProf))
       : data;
-    return filteredUsers.filter(user => user._id !== currentUser._id);
+    return filteredUsers.filter(user => user._id !== currentUserId);
   }
   const filteredUsers = filterUsers(users);
   const count = filteredUsers.length;
