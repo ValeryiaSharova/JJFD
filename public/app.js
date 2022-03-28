@@ -54,7 +54,7 @@ document.addEventListener("click", (event) => {
     const id = event.target.dataset.id;
     const newTitle = document.querySelector("#update").value;
     event.target.closest("li").innerHTML = `
-      ${newTitle}
+      <span>${newTitle}</span>
       <div>
         <button
           class="btn btn-primary"
