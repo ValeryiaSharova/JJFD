@@ -25,7 +25,7 @@ const Comment = ({ comment, handleDelete }) => {
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-1">
                     {user.name}
-                    <span className="small">- {displayDate(Number(comment.created_at))}</span>
+                    <span className="small">- {displayDate(comment.created_at)}</span>
                   </p>
                   {currentUserId === user._id ? (
                     <button
