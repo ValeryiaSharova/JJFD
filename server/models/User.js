@@ -7,10 +7,10 @@ const schema = new Schema(
     password: String,
     completedMeetings: Number,
     image: String,
-    professions: { type: Schema.Types.ObjectId, ref: "Profession" },
+    profession: { type: Schema.Types.ObjectId, ref: "Profession" },
     qualities: [{ type: Schema.Types.ObjectId, ref: "Quality" }],
     rate: Number,
-    sex: { type: String, enum: ["male", "female", "other"] },
+    sex: { type: String, enum: ["Мужской", "Женский", "Другой"] },
   },
   {
     timestamps: true,
