@@ -27,6 +27,10 @@ React application to learn routers.
 
 React-Redux "ToDo" application.
 
+#### dev-node
+
+Backend for react-redux "Fast company" application. 
+
 ## Deployment
 
 To deploy this project run
